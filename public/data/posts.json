@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "title": "Learning React",
+    "body": "React 19 introduces several exciting features that improve developer experience and application performance."
+  },
+  {
+    "id": 2,
+    "userId": 1,
+    "title": "Learn Typescript",
+    "body": "Use Typescript to avoid error in prod, caught the error from runtime"
+  },
+  {
+    "id": 3,
+    "userId": 2,
+    "title": "Building Scalable APIs",
+    "body": "Design principles and patterns for creating APIs that can handle growth and change over time."
+  },
+  {
+    "id": 4,
+    "userId": 2,
+    "title": "Database Optimization Tips",
+    "body": "Strategies for improving database performance through indexing, query optimization, and caching."
+  },
+  {
+    "id": 5,
+    "userId": 3,
+    "title": "UX Design Principles",
+    "body": "Core principles that create intuitive and delightful user experiences in digital products."
+  },
+  {
+    "id": 6,
+    "userId": 1,
+    "title": "Accessibility in Web Development",
+    "body": "Techniques for ensuring web applications are usable by people with diverse abilities."
+  },
+  {
+    "id": 7,
+    "userId": 1,
+    "title": "State Management in Modern Web Apps",
+    "body": "An overview of state management solutions and when to use them in your applications."
+  },
+  {
+    "id": 8,
+    "userId": 1,
+    "title": "Introduction to DevOps",
+    "body": "Understanding the principles and practices that enable faster and more reliable software delivery."
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "Shariq Hasan",
+    "email": "shariq@gmail.com",
+    "phone": "+91-637 402 3927",
+    "website": "shariqhasan.dev",
+    "company": {
+      "name": "Digital Innovations"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Muthuvel Raj",
+    "email": "muthu@aeq.com",
+    "phone": "+91-123-456-7890",
+    "website": "muthu.io",
+    "company": {
+      "name": "Digital Innovations"
+    }
+  },
+  {
+    "id": 3,
+    "name": "Dharani S",
+    "email": "dharani.s@mi.com",
+    "phone": "+91-444-222-6789",
+    "website": "dharu.com",
+    "company": {
+      "name": "Creative Labs"
+    }
+  },
+  {
+    "id": 4,
+    "name": "Mohan Raj",
+    "email": "mohan.r@company.com",
+    "phone": "+91-121-345-7891",
+    "website": "mohan.com",
+    "company": {
+      "name": "Creative Labs"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Anandhi V",
+    "email": "anandhi.v@company.com",
+    "phone": "+91-453-321-1234",
+    "website": "anandhi.v.com",
+    "company": {
+      "name": "Creative Labs"
+    }
+  }
+]
