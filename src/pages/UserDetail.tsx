@@ -12,19 +12,23 @@ import PostsHeader from "../components/common/posts/PostsHeader";
 import EmptyPostsState from "../components/common/posts/EmptyPostsState";
 import Pagination from "../components/ui/Pagination";
 import { usePagination } from "../hooks/usePagination";
+import { usePosts } from "../context/PostsContext";
 
 const POSTS_PER_PAGE = 3;
 
 const UserDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { getPosts, setPosts, addPost, updatePost, deletePost } = usePosts();
+
   const [user, setUser] = useState<User | null>(null);
-  const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [postsError, setPostsError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const userId = parseInt(id!);
+  const allPosts = getPosts(userId) || [];
 
   const filteredPosts = allPosts.filter((post) =>
     post.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -44,9 +48,7 @@ const UserDetail = () => {
       try {
         setLoading(true);
         setError(null);
-        setPostsError(null);
 
-        const userId = parseInt(id);
         const [userData, postsData] = await Promise.all([
           fetchUserById(userId),
           fetchPostsByUserId(userId),
@@ -55,7 +57,10 @@ const UserDetail = () => {
         if (!userData) throw new Error("User not found");
 
         setUser(userData);
-        setAllPosts(postsData);
+
+        if (!getPosts(userId)) {
+          setPosts(userId, postsData);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load data");
       } finally {
@@ -73,19 +78,17 @@ const UserDetail = () => {
       title,
       body,
     };
-    setAllPosts([newPost, ...allPosts]);
+    addPost(userId, newPost);
     setShowAddForm(false);
   };
 
   const handleEditPost = (id: number, title: string, body: string) => {
-    setAllPosts((prev) =>
-      prev.map((post) => (post.id === id ? { ...post, title, body } : post))
-    );
+    updatePost(userId, id, title, body);
     setEditingPost(null);
   };
 
   const handleDeletePost = (id: number) => {
-    setAllPosts((prev) => prev.filter((post) => post.id !== id));
+    deletePost(userId, id);
   };
 
   if (loading) return <LoadingSpinner />;
@@ -127,51 +130,47 @@ const UserDetail = () => {
           />
         )}
 
-        {postsError ? (
-          <ErrorMessage message={postsError} />
-        ) : (
-          <>
-            <div className="space-y-4">
-              {displayedPosts.map((post) =>
-                editingPost?.id === post.id ? (
-                  <PostForm
-                    key={post.id}
-                    post={editingPost}
-                    onSubmit={(title, body) =>
-                      handleEditPost(post.id, title, body)
-                    }
-                    onCancel={() => setEditingPost(null)}
-                  />
-                ) : (
-                  <PostItem
-                    key={post.id}
-                    post={post}
-                    onEdit={() => setEditingPost(post)}
-                    onDelete={() => handleDeletePost(post.id)}
-                  />
-                )
-              )}
+        <>
+          <div className="space-y-4">
+            {displayedPosts.map((post) =>
+              editingPost?.id === post.id ? (
+                <PostForm
+                  key={post.id}
+                  post={editingPost}
+                  onSubmit={(title, body) =>
+                    handleEditPost(post.id, title, body)
+                  }
+                  onCancel={() => setEditingPost(null)}
+                />
+              ) : (
+                <PostItem
+                  key={post.id}
+                  post={post}
+                  onEdit={() => setEditingPost(post)}
+                  onDelete={() => handleDeletePost(post.id)}
+                />
+              )
+            )}
+          </div>
+
+          {allPosts.length === 0 && !showAddForm && (
+            <EmptyPostsState onCreateClick={() => setShowAddForm(true)} />
+          )}
+
+          {allPosts.length > 0 && filteredPosts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">
+                No posts found matching "{searchQuery}"
+              </p>
             </div>
+          )}
 
-            {allPosts.length === 0 && !showAddForm && (
-              <EmptyPostsState onCreateClick={() => setShowAddForm(true)} />
-            )}
-
-            {allPosts.length > 0 && filteredPosts.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">
-                  No posts found matching "{searchQuery}"
-                </p>
-              </div>
-            )}
-
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={goToPage}
-            />
-          </>
-        )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+          />
+        </>
       </div>
     </div>
   );
